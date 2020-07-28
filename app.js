@@ -9,10 +9,13 @@ const express = require('express');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 // Internal dependencies
 
 const env = require('./config/environment');
+const { initCart } = require('./middleware/initSession');
 
 // Initialization
 
@@ -44,7 +47,23 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); // For form parsing
-app.use(cookieParser());
+//app.use(cookieParser());
+
+//Middleware: Session(this middleware gives us 'req.session' and creates cookie for us and associate it with the session)
+app.use(
+  session({
+    secret: env.secrets.session,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+);
+
+app.use(initCart);
 
 // Middleware: Static Assets
 
