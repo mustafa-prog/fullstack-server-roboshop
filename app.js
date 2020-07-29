@@ -36,6 +36,7 @@ mongoose.connection.on('error', (err) => console.error(err));
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
+const cartRouter = require('./routes/cart');
 
 // View Engine setup
 
@@ -63,10 +64,10 @@ app.use(
   })
 );
 
+//Initialize the Cart in the Session to reattach the Cart methods
 app.use(initCart);
 
 // Middleware: Static Assets
-
 app.use(
   sassMiddleware({
     src: path.join(__dirname, 'public'),
@@ -79,6 +80,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
+app.use('/cart', cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

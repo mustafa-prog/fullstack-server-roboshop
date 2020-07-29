@@ -19,16 +19,45 @@ class Cart {
           id,
           product,
           quantity: 0,
-          priceTotal: 0,
+          subTotal: 0,
         };
 
     // Increment quantity
     item.quantity += 1;
     // Update price total according to new quantity
-    item.priceTotal = item.quantity * item.product.price;
+    item.subTotal = item.quantity * item.product.price;
 
     // Add item to Cart
     this.items = { ...this.items, [id]: item };
+  }
+
+  removeOne(id) {
+    const item = { ...this.items[id] };
+    if (!item) return;
+    if (item.quantity === 1) return this.removeAll();
+    item.quantity--;
+    item.subTotal = item.quantity * item.product.price;
+    this.items = { ...this.items, [id]: item };
+  }
+
+  removeAll(id) {
+    const newItems = { ...this.items };
+    delete newItems[id];
+    this.items = newItems;
+  }
+
+  get totalPrice() {
+    return Object.values(this.items).reduce(
+      (acc, item) => acc + item.subTotal,
+      0
+    );
+  }
+
+  get totalItemCount() {
+    return Object.values(this.items).reduce(
+      (acc, item) => acc + item.quantity,
+      0
+    );
   }
 }
 
