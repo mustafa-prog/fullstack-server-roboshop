@@ -15,6 +15,7 @@ exports.addItemToCart = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(id))
       throw new createError.InternalServerError();
     const product = await Product.findById(id);
+    if (!product) throw new createError.NotFound();
     // Add to cart in session
     req.session.cart.add(id, product);
     // Temporarily send new cart as JSON

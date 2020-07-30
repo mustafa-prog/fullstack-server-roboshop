@@ -11,6 +11,11 @@ const sassMiddleware = require('node-sass-middleware');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
+const Handlebars = require('handlebars');
+var exphbs = require('express-handlebars');
+const {
+  allowInsecurePrototypeAccess,
+} = require('@handlebars/allow-prototype-access');
 
 // Internal dependencies
 
@@ -40,8 +45,20 @@ const cartRouter = require('./routes/cart');
 
 // View Engine setup
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, 'views')); //we say that my view templates are in this folder.
+app.set('view engine', 'hbs'); //we say that we will use handlebars as template language.
+
+//use express-handlebars to render our templates
+app.engine(
+  'hbs',
+  exphbs({
+    extname: '.hbs',
+    //layoutsDir: path.join(__dirname, 'views','layouts')
+    //defaultLayout: 'main'
+    //partialsDir: path.join(__dirname,'views','partials')
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+  })
+);
 
 // Middleware: Logging and Request Parsing
 

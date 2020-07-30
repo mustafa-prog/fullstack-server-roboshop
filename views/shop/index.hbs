@@ -1,0 +1,19 @@
+      <section class="row">
+        {{# each products}}
+        <div class="col-sm-6 col-lg-4 col-xl-3 d-flex" id = "{{this._id}}">
+          <article class="card product-card mb-4 text-white bg-dark">
+            <img class="card-img-top" src={{this.imgURL}} alt={{this.name}}>
+            <section class="card-body">
+              <h5 class="card-title product-title">{{this.name}}</h5>
+              <p class="card-text product-description">
+                {{this.description}}
+              </p>
+            </section>
+            <section class="card-footer product-info d-flex justify-content-between align-items-center">
+              <p class="mb-0 product-info">Price: <strong class="product-price">{{this.price}}</strong></p>
+              <a href="/cart/add/{{this._id}}" class="btn btn-outline-light cart-add">Add to cart</a>
+            </section>
+          </article>
+        </div>
+        {{/ each}}
+      </section>
