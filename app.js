@@ -20,7 +20,7 @@ const {
 // Internal dependencies
 
 const env = require('./config/environment');
-const { initCart } = require('./middleware/initSession');
+const { initCart, setLocals } = require('./middleware/initSession');
 
 // Initialization
 
@@ -82,7 +82,7 @@ app.use(
 );
 
 //Initialize the Cart in the Session to reattach the Cart methods
-app.use(initCart);
+app.use(initCart, setLocals);
 
 // Middleware: Static Assets
 app.use(
@@ -112,7 +112,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', { title: 'Error' });
 });
 
 module.exports = app;

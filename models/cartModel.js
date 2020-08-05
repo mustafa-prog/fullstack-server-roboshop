@@ -31,21 +31,32 @@ class Cart {
     this.items = { ...this.items, [id]: item };
   }
 
+  // Remove one robot from the Cart
   removeOne(id) {
+    // Find out if item under this id exists
     const item = { ...this.items[id] };
     if (!item) return;
-    if (item.quantity === 1) return this.removeAll();
+    // If there is just one left, call removeAll()
+    if (item.quantity === 1) return this.removeAll(id);
+    // Decrement quantity by one OR
     item.quantity--;
+    // Recalculate subTotal
     item.subTotal = item.quantity * item.product.price;
+    // Update cart
     this.items = { ...this.items, [id]: item };
   }
 
+  // Remove all robots of the same kind
   removeAll(id) {
+    // Clone items
     const newItems = { ...this.items };
+    // Delete the item by id
     delete newItems[id];
+    // Update cart
     this.items = newItems;
   }
 
+  // Class getter that returns the total price of items in cart
   get totalPrice() {
     return Object.values(this.items).reduce(
       (acc, item) => acc + item.subTotal,
@@ -53,11 +64,20 @@ class Cart {
     );
   }
 
+  // Class getter that returns the total number of items in cart
   get totalItemCount() {
     return Object.values(this.items).reduce(
       (acc, item) => acc + item.quantity,
       0
     );
+  }
+
+  calcVAT(VAT) {
+    const VATSum = (this.totalPrice / 100) * VAT;
+    return {
+      VATSum,
+      finalPrice: VATSum + this.totalPrice,
+    };
   }
 }
 

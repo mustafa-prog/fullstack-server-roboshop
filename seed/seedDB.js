@@ -3,6 +3,7 @@ const faker = require('faker');
 const slugify = require('slugify');
 
 const Product = require('../models/productModel');
+const User = require('../models/userModel');
 const env = require('../config/environment');
 
 (async () => {
@@ -22,6 +23,7 @@ const env = require('../config/environment');
 
   try {
     await Product.deleteMany({});
+    await User.deleteMany({});
     console.log('DB purged');
   } catch (err) {
     return console.error(err);
@@ -44,8 +46,15 @@ const env = require('../config/environment');
       };
     });
 
+  const fakeUser = new User({
+    email: 'mustafa@dci.com',
+    password: 'notsecretatall00',
+    creditCart: '43453467456776578',
+  });
+
   try {
     await Product.create(fakeProducts);
+    await User.create(fakeUser);
     console.log('Fake data written');
   } catch (err) {
     console.error(err);
