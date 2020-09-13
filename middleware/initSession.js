@@ -22,5 +22,7 @@ exports.setLocals = (req, res, next) => {
     );
   }
   res.locals.shop = 'RoboShop';
+  res.locals.isLoggedIn = req.isAuthenticated();
+  res.locals.user = req.user;
   next();
 };

@@ -3,7 +3,7 @@
 // External dependencies
 
 const path = require('path');
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
@@ -16,11 +16,13 @@ var exphbs = require('express-handlebars');
 const {
   allowInsecurePrototypeAccess,
 } = require('@handlebars/allow-prototype-access');
+const flash = require('connect-flash');
 
 // Internal dependencies
 
 const env = require('./config/environment');
 const { initCart, setLocals } = require('./middleware/initSession');
+const passport = require('./lib/auth');
 
 // Initialization
 
@@ -80,6 +82,13 @@ app.use(
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 );
+
+// Enable flash messages
+app.use(flash());
+
+// Middleware: Authentication (needs to come after session and flash)
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Initialize the Cart in the Session to reattach the Cart methods
 app.use(initCart, setLocals);

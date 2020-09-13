@@ -49,7 +49,7 @@ const env = require('../config/environment');
   const fakeUser = new User({
     email: 'mustafa@dci.com',
     password: 'notsecretatall00',
-    creditCart: '43453467456776578',
+    creditCard: '43453467456776578',
   });
 
   try {
